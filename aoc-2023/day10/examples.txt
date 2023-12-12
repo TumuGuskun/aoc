@@ -1,0 +1,10 @@
+### Example 1
+---
+-L|F7
+7S-7|
+L|7||
+-L-J|
+L|-JF
+---
+Answer 1: 4
+Answer 2: None

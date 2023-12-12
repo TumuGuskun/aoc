@@ -1,9 +1,11 @@
 from __future__ import annotations
+
 from dataclasses import dataclass
 from typing import Any
-from shared.grid import Grid, NORTH, SOUTH, EAST, WEST
+
 from aocd.examples import Example
 
+from shared.grid import EAST, NORTH, SOUTH, WEST, Grid
 from shared.point import Point
 from shared.util import coordinate, get_puzzle, run, timed
 

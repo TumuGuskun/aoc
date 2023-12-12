@@ -1,6 +1,6 @@
+import re
 from copy import copy
 from dataclasses import dataclass
-import re
 from typing import Any
 
 from aocd.examples import Example
