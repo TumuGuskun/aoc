@@ -149,3 +149,11 @@ class Grid:
 
     def find(self, value: Any) -> list[Point]:
         return list(map(lambda p: Point(*p), np.argwhere(self.grid == value)))
+
+    def insert_row(self, i: int, value: Any) -> None:
+        self.grid = np.insert(self.grid, i, value, axis=0)
+        self.height += 1
+
+    def insert_column(self, j: int, value: Any) -> None:
+        self.grid = np.insert(self.grid, j, value, axis=1)
+        self.width += 1

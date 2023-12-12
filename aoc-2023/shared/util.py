@@ -131,7 +131,7 @@ def get_time_color(time: float) -> Color:
 
 
 def print_run_output(output: list[str]) -> None:
-    print("{: <30} {: <30} {: >20}".format(*output))
+    print("{: <30} {: <40} {: >20}".format(*output))
 
 
 def print_example_output(
@@ -235,6 +235,7 @@ def run(
     run_part_1: bool = True,
     run_part_2: bool = True,
     run_examples: bool = True,
+    force_run_2: bool = False,
 ) -> None:
     if run_part_1:
         if run_examples:
@@ -247,11 +248,11 @@ def run(
         if run_examples:
             run_part_2 = check_examples(puzzle.examples, part_2)
 
-        if run_part_2:
+        if run_part_2 or force_run_2:
             submit(puzzle, part_2)
 
 
-def export_data(puzzle: Puzzle, year: int, day: int) -> None:
+def import_export_data(puzzle: Puzzle, year: int, day: int) -> None:
     if not os.path.exists(
         f"/Users/timgaskin/workspace/aoc/aoc-{year}/day{day}/input.txt"
     ):
@@ -260,9 +261,31 @@ def export_data(puzzle: Puzzle, year: int, day: int) -> None:
         ) as f:
             f.write(puzzle.input_data)
 
-    if not os.path.exists(
+    if os.path.exists(
         f"/Users/timgaskin/workspace/aoc/aoc-{year}/day{day}/examples.txt"
     ):
+        with open(
+            f"/Users/timgaskin/workspace/aoc/aoc-{year}/day{day}/examples.txt"
+        ) as f:
+            examples = []
+            for example in f.read().split("\n\n-----------------------------\n\n"):
+                if not example:
+                    continue
+
+                example = example.split("\n---\n")
+                raw_answer_a, raw_answer_b = example[2].split("\n")
+                answer_a = "" if "None" in raw_answer_a else raw_answer_a.split(": ")[1]
+                answer_b = "" if "None" in raw_answer_b else raw_answer_b.split(": ")[1]
+                examples.append(
+                    Example(
+                        input_data=example[1],
+                        answer_a=answer_a,
+                        answer_b=answer_b,
+                    )
+                )
+
+            puzzle._get_examples = lambda parser_name=None: examples
+    else:
         with open(
             f"/Users/timgaskin/workspace/aoc/aoc-{year}/day{day}/examples.txt", "w"
         ) as f:
@@ -290,5 +313,5 @@ def get_puzzle(file_path: str) -> Puzzle:
     day = int(file_path.split("/")[-2].removeprefix("day"))
 
     puzzle = Puzzle(year=year, day=day)
-    export_data(puzzle=puzzle, year=year, day=day)
+    import_export_data(puzzle=puzzle, year=year, day=day)
     return puzzle

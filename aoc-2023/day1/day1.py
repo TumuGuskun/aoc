@@ -1,19 +1,7 @@
 import re
 from typing import Any
 
-from aocd.models import Puzzle
-
-from shared.util import export_data, run, timed
-
-
-@timed
-def get_puzzle() -> Puzzle:
-    year = int(__file__.split("/")[-3].removeprefix("aoc-"))
-    day = int(__file__.split("/")[-2].removeprefix("day"))
-
-    puzzle = Puzzle(year=year, day=day)
-    export_data(puzzle=puzzle, year=year, day=day)
-    return puzzle
+from shared.util import get_puzzle, run, timed
 
 
 def parse_data(input_data: str) -> Any:
@@ -68,7 +56,8 @@ def part_2(input_data: str) -> Any:
 
 
 def main() -> None:
-    puzzle, _ = get_puzzle()
+    puzzle = get_puzzle(__file__)
+    print(puzzle, puzzle.input_data, puzzle.examples)
     run(puzzle=puzzle, part_1=part_1, part_2=part_2)
 
 

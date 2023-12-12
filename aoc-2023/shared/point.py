@@ -43,7 +43,7 @@ class Point:
     def euc_distance(self, other: Point) -> float:
         return sqrt((self.i - other.i) ** 2 + (self.j - other.j) ** 2)
 
-    def man_distance(self, other: Point) -> float:
+    def man_distance(self, other: Point) -> int:
         return abs(self.i - other.i) + abs(self.j - other.j)
 
     def is_neighbor(self, other: Point) -> bool:
