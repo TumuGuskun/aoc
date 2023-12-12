@@ -77,18 +77,6 @@ def part_2(input_data: str) -> Any:
 
 def main() -> None:
     puzzle = get_puzzle(__file__)
-    puzzle._get_examples = lambda parser_name=None: [
-        Example(
-            input_data="""???.### 1,1,3
-.??..??...?##. 1,1,3
-?#?#?#?#?#?#?#? 1,3,1,6
-????.#...#... 4,1,1
-????.######..#####. 1,6,5
-?###???????? 3,2,1""",
-            answer_a="21",
-            answer_b="",
-        )
-    ]
     run(puzzle=puzzle, part_1=part_1, part_2=part_2)
 
 
