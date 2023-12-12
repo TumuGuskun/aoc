@@ -5,4 +5,4 @@
 10 13 16 21 30 45
 ---
 Answer 1: 114
-Answer 2: None
+Answer 2: 2

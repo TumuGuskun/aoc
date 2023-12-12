@@ -73,13 +73,6 @@ def part_2(input_data: str) -> Any:
 
 def main() -> None:
     puzzle = get_puzzle(__file__)
-    puzzle._get_examples = lambda parser_name=None: [
-        Example(
-            input_data="0 3 6 9 12 15\n1 3 6 10 15 21\n10 13 16 21 30 45",
-            answer_a="114",
-            answer_b="2",
-        )
-    ]
     run(puzzle=puzzle, part_1=part_1, part_2=part_2)
 
 

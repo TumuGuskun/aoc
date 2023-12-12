@@ -2,9 +2,9 @@ from __future__ import annotations
 
 import re
 from dataclasses import dataclass
+from typing import Any
 
-from shared.gum import gum_choose
-from shared.util import get_input_files, timed
+from shared.util import get_puzzle, run, timed
 
 
 @dataclass
@@ -44,39 +44,39 @@ class Game:
         return Pull(max_red, max_blue, max_green)
 
 
-@timed
-def read() -> list[Game]:
-    files = get_input_files(__file__)
-    if len(files) == 1:
-        file_name = files[0]
-    else:
-        _, file_name = gum_choose(files, "Choose input file")
+def parse_data(input_data: str) -> Any:
+    games = []
+    for game_line in input_data.splitlines():
+        game_id = int(re.search(r"Game (\d+):", game_line).group(1))
+        pulls = [
+            Pull.from_description(raw_pull)
+            for raw_pull in game_line.split(":")[1].split(";")
+        ]
+        games.append(Game(game_id, pulls))
 
-    print(f"Reading from {file_name.split('/')[-1]}")
-    with open(file_name) as input_file:
-        games = []
-        for game_line in input_file.readlines():
-            game_id = int(re.search(r"Game (\d+):", game_line).group(1))
-            pulls = [
-                Pull.from_description(raw_pull)
-                for raw_pull in game_line.split(":")[1].split(";")
-            ]
-            games.append(Game(game_id, pulls))
-
-        return games
+    return games
 
 
 @timed
-def part1(games: list[Game]) -> None:
-    print(sum([game.game_id for game in games if game.is_valid()]))
+def part_1(input_data: str) -> Any:
+    games = parse_data(input_data=input_data)
+
+    # Body Logic
+    return sum(game.game_id for game in games if game.is_valid())
 
 
 @timed
-def part2(games: list[Game]) -> None:
-    print(sum([game.get_miminal_set().power for game in games]))
+def part_2(input_data: str) -> Any:
+    games = parse_data(input_data=input_data)
+
+    # Body Logic
+    return sum(game.get_miminal_set().power for game in games)
+
+
+def main() -> None:
+    puzzle = get_puzzle(__file__)
+    run(puzzle=puzzle, part_1=part_1, part_2=part_2)
 
 
 if __name__ == "__main__":
-    game_list = read()
-    part1(game_list)
-    part2(game_list)
+    main()

@@ -1,23 +1,8 @@
 from math import prod
 
-from shared.gum import gum_choose
-from shared.util import get_input_files, get_ints, timed
+from typing import Any
 
-
-@timed
-def read():
-    files = get_input_files(__file__)
-    if len(files) == 1:
-        file_name = files[0]
-    else:
-        _, file_name = gum_choose(files, "Choose input file")
-
-    print(f"Reading from {file_name.split('/')[-1]}")
-    with open(file_name) as input_file:
-        times = get_ints(input_file.readline())
-        distances = get_ints(input_file.readline())
-
-    return list(zip(times, distances))
+from shared.util import get_puzzle, run, timed, get_ints
 
 
 def get_winners(time: int, distance: int) -> int:
@@ -41,24 +26,40 @@ def get_winners(time: int, distance: int) -> int:
     return time - 2 * lowest + 1
 
 
+def parse_data(input_data: str) -> Any:
+    times, distances = map(get_ints, input_data.splitlines())
+    return list(zip(times, distances))
+
+
 @timed
-def part1(inputs: list[tuple[int, int]]):
+def part_1(input_data: str) -> Any:
+    inputs = parse_data(input_data=input_data)
+
+    # Body Logic
     winners = []
     for time, distance in inputs:
         winners.append(get_winners(time, distance))
 
-    print(prod(winners))
+    print(winners)
+
+    return prod(winners)
 
 
 @timed
-def part2(inputs: list[tuple[int, int]]):
+def part_2(input_data: str) -> Any:
+    inputs = parse_data(input_data=input_data)
+
+    # Body Logic
     time = int("".join(map(str, [x[0] for x in inputs])))
     distance = int("".join(map(str, [x[1] for x in inputs])))
 
-    print(get_winners(time, distance))
+    return get_winners(time, distance)
+
+
+def main() -> None:
+    puzzle = get_puzzle(__file__)
+    run(puzzle=puzzle, part_1=part_1, part_2=part_2)
 
 
 if __name__ == "__main__":
-    input_list = read()
-    part1(input_list)
-    part2(input_list)
+    main()

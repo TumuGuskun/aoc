@@ -150,7 +150,7 @@ def print_example_output(
     else:
         output = [
             colored(f"✅ Example {example_number} passed", Color.GREEN),
-            colored(" ", Color.MAGENTA),
+            colored(f"Answer: {my_answer}", Color.MAGENTA),
             colored(f"{time:>8.6f}s", time_color),
         ]
 

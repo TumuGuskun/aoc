@@ -1,4 +1,7 @@
+### Example 1
+---
 seeds: 79 14 55 13
+
 seed-to-soil map:
 50 98 2
 52 50 48
@@ -30,4 +33,6 @@ temperature-to-humidity map:
 humidity-to-location map:
 60 56 37
 56 93 4
-
+---
+Answer 1: 35
+Answer 2: 46

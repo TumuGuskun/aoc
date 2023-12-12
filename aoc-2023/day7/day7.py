@@ -2,9 +2,8 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Any
 
-from aocd.models import Puzzle
 
-from shared.util import export_data, run, timed
+from shared.util import run, timed, get_puzzle
 
 
 class Rank(Enum):
@@ -115,15 +114,6 @@ class Hand:
         return False
 
 
-def get_puzzle() -> Puzzle:
-    year = int(__file__.split("/")[-3].removeprefix("aoc-"))
-    day = int(__file__.split("/")[-2].removeprefix("day"))
-
-    puzzle = Puzzle(year=year, day=day)
-    export_data(puzzle=puzzle, year=year, day=day)
-    return puzzle
-
-
 def parse_data(input_data: str) -> Any:
     output = []
     for line in input_data.splitlines():
@@ -153,7 +143,7 @@ def part_2(input_data: str) -> Any:
 
 
 def main() -> None:
-    puzzle = get_puzzle()
+    puzzle = get_puzzle(__file__)
     run(puzzle=puzzle, part_1=part_1, part_2=part_2)
 
 

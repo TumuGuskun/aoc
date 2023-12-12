@@ -1,8 +1,7 @@
 from dataclasses import dataclass
-from pprint import pprint
+from typing import Any
 
-from shared.gum import gum_choose
-from shared.util import get_input_files, get_ints, timed
+from shared.util import get_ints, get_puzzle, run, timed
 
 
 @dataclass
@@ -12,36 +11,29 @@ class Map:
     range_length: int
 
 
-@timed
-def read() -> tuple[list[int], list[list[Map]]]:
-    files = get_input_files(__file__)
-    if len(files) == 1:
-        file_name = files[0]
-    else:
-        _, file_name = gum_choose(files, "Choose input file")
+def parse_data(input_data: str) -> Any:
+    seeds, map_types = [], []
 
-    print(f"Reading from {file_name.split('/')[-1]}")
-    with open(file_name) as input_file:
-        seeds, map_types = [], []
+    typed_map = []
+    for line in input_data.splitlines():
+        line = line.strip()
+        if line.startswith("seeds:"):
+            seeds = get_ints(line)
+        elif not line:
+            map_types.append(typed_map)
+        elif line[0].isalpha():
+            typed_map = []
+        else:
+            typed_map.append(Map(*get_ints(line)))
 
-        typed_map = []
-        for line in input_file.readlines():
-            line = line.strip()
-            if line.startswith("seeds:"):
-                seeds = get_ints(line)
-            elif not line:
-                map_types.append(typed_map)
-            elif line[0].isalpha():
-                typed_map = []
-            else:
-                typed_map.append(Map(*get_ints(line)))
-
-        return seeds, map_types
+    return seeds, map_types
 
 
 @timed
-def part1(inputs: tuple[list[int], list[list[Map]]]):
-    seeds, maps = inputs
+def part_1(input_data: str) -> Any:
+    seeds, maps = parse_data(input_data=input_data)
+
+    # Body Logic
     locations = []
 
     for seed in seeds:
@@ -58,12 +50,14 @@ def part1(inputs: tuple[list[int], list[list[Map]]]):
 
         locations.append(curr_value)
 
-    print(min(locations))
+    return min(locations)
 
 
 @timed
-def part2(inputs: tuple[list[int], list[list[Map]]]):
-    seeds, maps = inputs
+def part_2(input_data: str) -> Any:
+    seeds, maps = parse_data(input_data=input_data)
+
+    # Body Logic
     min_location = float("inf")
 
     seed_iter = iter(seeds)
@@ -82,10 +76,13 @@ def part2(inputs: tuple[list[int], list[list[Map]]]):
 
             min_location = min(min_location, curr_value)
 
-    print(min_location)
+    return min_location
+
+
+def main() -> None:
+    puzzle = get_puzzle(__file__)
+    run(puzzle=puzzle, part_1=part_1, part_2=part_2)
 
 
 if __name__ == "__main__":
-    map_list = read()
-    part1(map_list)
-    part2(map_list)
+    main()

@@ -58,24 +58,6 @@ def part_2(input_data: str) -> Any:
 
 def main() -> None:
     puzzle = get_puzzle(__file__)
-    examples = [
-        Example(
-            input_data="RL\n\nAAA = (BBB, CCC)\nBBB = (DDD, EEE)\nCCC = (ZZZ, GGG)\nDDD = (DDD, DDD)\nEEE = (EEE, EEE)\nGGG = (GGG, GGG)\nZZZ = (ZZZ, ZZZ)",
-            answer_a="2",
-            answer_b="",
-        ),
-        Example(
-            input_data="LLR\n\nAAA = (BBB, BBB)\nBBB = (AAA, ZZZ)\nZZZ = (ZZZ, ZZZ)",
-            answer_a="6",
-            answer_b="",
-        ),
-        Example(
-            input_data="LR\n\n11A = (11B, XXX)\n11B = (XXX, 11Z)\n11Z = (11B, XXX)\n22A = (22B, XXX)\n22B = (22C, 22C)\n22C = (22Z, 22Z)\n22Z = (22B, 22B)\nXXX = (XXX, XXX)",
-            answer_a="",
-            answer_b="6",
-        ),
-    ]
-    puzzle._get_examples = lambda parser_name=None: examples
     run(puzzle=puzzle, part_1=part_1, part_2=part_2)
 
 
