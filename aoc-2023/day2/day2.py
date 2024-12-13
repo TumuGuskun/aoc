@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import re
 from dataclasses import dataclass
-from typing import Any
 
 from shared.util import get_puzzle, run, timed
 
@@ -44,7 +43,7 @@ class Game:
         return Pull(max_red, max_blue, max_green)
 
 
-def parse_data(input_data: str) -> Any:
+def parse_data(input_data: str) -> list[Game]:
     games = []
     for game_line in input_data.splitlines():
         game_id = int(re.search(r"Game (\d+):", game_line).group(1))
@@ -58,24 +57,23 @@ def parse_data(input_data: str) -> Any:
 
 
 @timed
-def part_1(input_data: str) -> Any:
-    games = parse_data(input_data=input_data)
-
-    # Body Logic
+def part_1(games: list[Game]) -> int:
     return sum(game.game_id for game in games if game.is_valid())
 
 
 @timed
-def part_2(input_data: str) -> Any:
-    games = parse_data(input_data=input_data)
-
-    # Body Logic
+def part_2(games: list[Game]) -> int:
     return sum(game.get_miminal_set().power for game in games)
 
 
 def main() -> None:
     puzzle = get_puzzle(__file__)
-    run(puzzle=puzzle, part_1=part_1, part_2=part_2)
+    run(
+        puzzle=puzzle,
+        part_1=part_1,
+        part_2=part_2,
+        parser=parse_data,
+    )
 
 
 if __name__ == "__main__":

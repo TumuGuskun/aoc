@@ -1,6 +1,5 @@
 import re
 from dataclasses import dataclass
-
 from typing import Any
 
 from shared.util import get_puzzle, run, timed

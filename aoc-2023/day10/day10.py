@@ -1,16 +1,13 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any
-
-from aocd.examples import Example
 
 from shared.grid import EAST, NORTH, SOUTH, WEST, Grid
 from shared.point import Point
 from shared.util import coordinate, get_puzzle, run, timed
 
 
-def parse_data(input_data: str) -> Any:
+def parse_data(input_data: str) -> Grid:
     grid = Grid(input_data.splitlines())
     return grid
 
@@ -120,10 +117,7 @@ def get_loop(grid: Grid) -> list[Pipe]:
 
 
 @timed
-def part_1(input_data: str) -> Any:
-    grid: Grid = parse_data(input_data=input_data)
-
-    # Body Logic
+def part_1(grid: Grid) -> int:
     loop = get_loop(grid=grid)
 
     return len(loop) // 2
@@ -150,20 +144,15 @@ def dot_in_loop(dot: Point, loop: set[Point], grid: Grid) -> bool:
 
 
 @timed
-def part_2(input_data: str) -> Any:
-    grid: Grid = parse_data(input_data=input_data)
-
-    # Body Logic
+def part_2(grid: Grid) -> int:
     loop = set(pipe.coordinates for pipe in get_loop(grid=grid))
 
-    return len(
-        [_ for dot, _ in coordinate(grid) if dot_in_loop(Point(*dot), loop, grid)]
-    )
+    return len([_ for dot, _ in coordinate(grid) if dot_in_loop(dot, loop, grid)])
 
 
 def main() -> None:
     puzzle = get_puzzle(__file__)
-    run(puzzle=puzzle, part_1=part_1, part_2=part_2)
+    run(puzzle=puzzle, part_1=part_1, part_2=part_2, parser=parse_data)
 
 
 if __name__ == "__main__":

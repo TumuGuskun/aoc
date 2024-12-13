@@ -18,37 +18,35 @@ class Symbol:
     coordinate: Point
 
 
-def parse_data(input_data: str) -> Any:
+def parse_data(input_data: str) -> tuple[list[Number], set[Symbol]]:
     numbers = []
     symbol_points = set()
     in_number = False
     curr_value = ""
     curr_coordinates = []
-    for (i, j), value in coordinate(input_data.splitlines()):
+    for point, value in coordinate(input_data.splitlines()):
         if value.isalnum():
             if in_number:
                 curr_value += value
-                curr_coordinates.append(Point(i, j))
+                curr_coordinates.append(point)
             else:
                 in_number = True
                 curr_value = value
-                curr_coordinates = [Point(i, j)]
+                curr_coordinates = [point]
         else:
             if in_number:
                 numbers.append(Number(int(curr_value), curr_coordinates))
                 in_number = False
 
         if re.match(r"[^\s\w\.]", value):
-            symbol_points.add(Symbol(value, Point(i, j)))
+            symbol_points.add(Symbol(value, point))
 
     return numbers, symbol_points
 
 
 @timed
-def part_1(input_data: str) -> Any:
-    numbers, symbols = parse_data(input_data=input_data)
-
-    # Body Logic
+def part_1(input_data: tuple[list[Number], set[Symbol]]) -> int:
+    numbers, symbols = input_data
     valid_numbers = []
     for number in numbers:
         for symbol in symbols:
@@ -61,10 +59,8 @@ def part_1(input_data: str) -> Any:
 
 
 @timed
-def part_2(input_data: str) -> Any:
-    numbers, symbols = parse_data(input_data=input_data)
-
-    # Body Logic
+def part_2(input_data: tuple[list[Number], set[Symbol]]) -> int:
+    numbers, symbols = input_data
     gears = []
     for symbol in symbols:
         if symbol.value == "*":
@@ -83,7 +79,12 @@ def part_2(input_data: str) -> Any:
 
 def main() -> None:
     puzzle = get_puzzle(__file__)
-    run(puzzle=puzzle, part_1=part_1, part_2=part_2)
+    run(
+        puzzle=puzzle,
+        part_1=part_1,
+        part_2=part_2,
+        parser=parse_data,
+    )
 
 
 if __name__ == "__main__":

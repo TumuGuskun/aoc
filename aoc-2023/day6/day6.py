@@ -1,8 +1,7 @@
 from math import prod
-
 from typing import Any
 
-from shared.util import get_puzzle, run, timed, get_ints
+from shared.util import get_ints, get_puzzle, run, timed
 
 
 def get_winners(time: int, distance: int) -> int:

@@ -5,13 +5,14 @@ from enum import Enum
 from functools import wraps
 from itertools import islice
 from time import perf_counter
-from typing import Any, Callable, Iterable, TypeVar
+from typing import Any, Callable, Iterable, Optional, TypeVar
 
 from aocd.examples import Example
 from aocd.models import Puzzle
 from yaspin import yaspin
 
 from shared.grid import Grid
+from shared.point import Point
 
 T = TypeVar("T")
 
@@ -78,12 +79,12 @@ def ints(start=0, step=1):
         start += step
 
 
-def coordinate(grid: Iterable | Grid):
+def coordinate(grid: Iterable | Grid) -> Iterable[tuple[Point, Any]]:
     if isinstance(grid, Grid):
         grid = grid.grid
     for i, row in enumerate(grid):
         for j, v in enumerate(row):
-            yield (i, j), v
+            yield Point(i, j), v
 
 
 def tail(iterable: Iterable[T]) -> Iterable[T]:
@@ -157,7 +158,11 @@ def print_example_output(
     print_run_output(output=output)
 
 
-def check_examples(examples: list[Example], solve_function: Callable) -> bool:
+def check_examples(
+    examples: list[Example],
+    solve_function: Callable,
+    parser: Callable,
+) -> bool:
     print(
         colored(
             f"\n{solve_function.__name__.replace('_', ' ').upper()}\n------\n",
@@ -178,9 +183,11 @@ def check_examples(examples: list[Example], solve_function: Callable) -> bool:
 
         ran_any = True
         with yaspin(text=f"Running example {i}", color="yellow"):
-            my_answer, time = solve_function(example.input_data)
+            ts = perf_counter()
+            my_answer = solve_function(parser(example.input_data))
+            te = perf_counter()
             passed_all_examples = str(my_answer) == their_answer and passed_all_examples
-        print_example_output(i, my_answer, their_answer, time)
+        print_example_output(i, my_answer, their_answer, te - ts)
 
     if not ran_any:
         print_run_output(
@@ -195,15 +202,18 @@ def check_examples(examples: list[Example], solve_function: Callable) -> bool:
     return passed_all_examples
 
 
-def submit(puzzle: Puzzle, solve_function: Callable) -> None:
+def submit(puzzle: Puzzle, solve_function: Callable, parser: Callable) -> None:
     part_name = solve_function.__name__.replace("_", " ").capitalize()
 
     with yaspin(
         text=f"Running {part_name}",
         color="yellow",
     ):
-        answer, time = solve_function(puzzle.input_data)
+        ts = perf_counter()
+        answer = solve_function(parser(puzzle.input_data))
+        te = perf_counter()
 
+    time = te - ts
     time_color = get_time_color(time)
     if part_name == "Part 1":
         puzzle.answer_a = answer
@@ -232,6 +242,8 @@ def run(
     puzzle: Puzzle,
     part_1: Callable,
     part_2: Callable,
+    parser: Callable,
+    part_2_parser: Optional[Callable] = None,
     run_part_1: bool = True,
     run_part_2: bool = True,
     run_examples: bool = True,
@@ -239,17 +251,18 @@ def run(
 ) -> None:
     if run_part_1:
         if run_examples:
-            run_part_1 = check_examples(puzzle.examples, part_1)
+            run_part_1 = check_examples(puzzle.examples, part_1, parser)
 
         if run_part_1:
-            submit(puzzle, part_1)
+            submit(puzzle, part_1, parser)
 
     if run_part_2 and puzzle.answered_a:
+        parser = parser if part_2_parser is None else part_2_parser
         if run_examples:
-            run_part_2 = check_examples(puzzle.examples, part_2)
+            run_part_2 = check_examples(puzzle.examples, part_2, parser)
 
         if run_part_2 or force_run_2:
-            submit(puzzle, part_2)
+            submit(puzzle, part_2, parser)
 
 
 def import_export_data(puzzle: Puzzle, year: int, day: int) -> None:
@@ -273,7 +286,7 @@ def import_export_data(puzzle: Puzzle, year: int, day: int) -> None:
                     continue
 
                 example = example.split("\n---\n")
-                raw_answer_a, raw_answer_b = example[2].split("\n")
+                raw_answer_a, raw_answer_b = example[2].strip().split("\n")
                 answer_a = "" if "None" in raw_answer_a else raw_answer_a.split(": ")[1]
                 answer_b = "" if "None" in raw_answer_b else raw_answer_b.split(": ")[1]
                 examples.append(

@@ -1,18 +1,14 @@
 import re
-from typing import Any
 
 from shared.util import get_puzzle, run, timed
 
 
-def parse_data(input_data: str) -> Any:
+def parse_data(input_data: str) -> list[str]:
     return list(map(lambda x: x.strip(), input_data.splitlines()))
 
 
 @timed
-def part_1(input_data: str) -> Any:
-    parsed_data = parse_data(input_data=input_data)
-
-    # Body Logic
+def part_1(parsed_data: list[str]) -> int:
     reduced_numbers = []
     for line in parsed_data:
         line_numbers = re.sub(r"[a-z]", "", line)
@@ -35,10 +31,7 @@ NUMBER_PATTERNS = {
 
 
 @timed
-def part_2(input_data: str) -> Any:
-    parsed_data = parse_data(input_data=input_data)
-
-    # Body Logic
+def part_2(parsed_data: list[str]) -> int:
     reduced_numbers = []
     for line in parsed_data:
         reduced_number = []
@@ -57,8 +50,7 @@ def part_2(input_data: str) -> Any:
 
 def main() -> None:
     puzzle = get_puzzle(__file__)
-    print(puzzle, puzzle.input_data, puzzle.examples)
-    run(puzzle=puzzle, part_1=part_1, part_2=part_2)
+    run(puzzle=puzzle, part_1=part_1, part_2=part_2, parser=parse_data)
 
 
 if __name__ == "__main__":

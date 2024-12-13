@@ -1,0 +1,23 @@
+### Example 1
+---
+broadcaster -> a, b, c
+%a -> b
+%b -> c
+%c -> inv
+&inv -> a
+---
+Answer 1: 32000000
+Answer 2: None
+
+-----------------------------
+
+### Example 2
+---
+broadcaster -> a
+%a -> inv, con
+&inv -> b
+%b -> con
+&con -> output
+---
+Answer 1: 11687500
+Answer 2: None

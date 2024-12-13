@@ -54,9 +54,7 @@ def get_updated_man_distance(
 
 
 @timed
-def part_1(input_data: str) -> Any:
-    grid = parse_data(input_data=input_data)
-
+def part_1(grid: Grid) -> Any:
     # Body Logic
     empty_rows, empty_columns = get_empty_rows_columns(grid=grid)
     total = 0
@@ -73,9 +71,7 @@ def part_1(input_data: str) -> Any:
 
 
 @timed
-def part_2(input_data: str) -> Any:
-    grid = parse_data(input_data=input_data)
-
+def part_2(grid: Grid) -> Any:
     # Body Logic
     empty_rows, empty_columns = get_empty_rows_columns(grid=grid)
     total = 0
@@ -93,7 +89,13 @@ def part_2(input_data: str) -> Any:
 
 def main() -> None:
     puzzle = get_puzzle(__file__)
-    run(puzzle=puzzle, part_1=part_1, part_2=part_2, force_run_2=True)
+    run(
+        puzzle=puzzle,
+        part_1=part_1,
+        part_2=part_2,
+        parser=parse_data,
+        force_run_2=True,
+    )
 
 
 if __name__ == "__main__":

@@ -1,0 +1,6 @@
+### Example 1
+---
+125 17
+---
+Answer 1: 55312
+Answer 2: None

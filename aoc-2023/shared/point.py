@@ -13,6 +13,9 @@ class Point:
     def __add__(self, other: Point) -> Point:
         return Point(self.i + other.i, self.j + other.j)
 
+    def __sub__(self, other: Point) -> Point:
+        return Point(self.i - other.i, self.j - other.j)
+
     def __hash__(self) -> int:
         return hash((self.i, self.j))
 

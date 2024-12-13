@@ -2,8 +2,7 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Any
 
-
-from shared.util import run, timed, get_puzzle
+from shared.util import get_puzzle, run, timed
 
 
 class Rank(Enum):
